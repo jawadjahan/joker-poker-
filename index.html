@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Money Tracker Pro</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="topbar">
+    <div>
+      <h1>🎮 Money Tracker Pro</h1>
+      <p>Multiplayer bid • player balance • pot • bank loans • master records</p>
+    </div>
+    <div class="header-actions">
+      <button id="undoBtn" class="danger">↩ Undo</button>
+      <button id="redoBtn">↪ Redo</button>
+    </div>
+  </header>
+
+  <section class="stats-grid">
+    <div class="stat"><span>Running Players</span><strong id="statRunning">0</strong></div>
+    <div class="stat"><span>Players Total</span><strong id="statPlayers">0</strong></div>
+    <div class="stat"><span>Running Pot</span><strong id="potAmount">৳0</strong></div>
+    <div class="stat"><span>Bot / Bank</span><strong id="botBalance">৳10,000</strong></div>
+  </section>
+
+  <main>
+    <section class="card">
+      <div class="section-head">
+        <h2>👥 Add Player</h2>
+        <span class="badge">Permanent Master Record</span>
+      </div>
+      <div class="grid three">
+        <label>Player Name<input id="playerName" placeholder="নেশা নারী তাস তিলে তিলে সর্বনাশ"></label>
+        <label>Starting Money<input id="moneyGiven" type="number" min="0" step="1" placeholder="500"></label>
+        <label>Player Note<input id="playerNote" placeholder="Optional"></label>
+      </div>
+      <button id="addPlayerBtn">+ Add New Player</button>
+
+      <div id="addExistingBox" class="existing-box hidden">
+        <h3>♻️ Add Existing Player Back</h3>
+        <div class="grid two">
+          <select id="existingPlayerSelect"></select>
+          <button id="addExistingBtn">Add to Running</button>
+        </div>
+        <small>Existing player's current balance, loans and master history are preserved.</small>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <h2>🎯 Running Players</h2>
+        <span class="badge" id="roundBadge">Round 1</span>
+      </div>
+      <div id="runningPlayers" class="player-list"></div>
+      <div class="pot">
+        <span>Running Pot</span><strong id="potAmount2">৳0</strong>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>🎲 Player Action</h2>
+      <label>Select Running Player<select id="actionPlayer"></select></label>
+      <div class="grid two action-grid">
+        <div class="action-box">
+          <h3>↩ Fold</h3>
+          <p>Move money from player to the current pot.</p>
+          <input id="foldAmount" type="number" min="0" step="1" value="0">
+          <button id="foldBtn">Fold</button>
+        </div>
+        <div class="action-box">
+          <h3>❌ Lost Bid</h3>
+          <p>Move the lost bid amount into the pot.</p>
+          <input id="lostAmount" type="number" min="0" step="1" value="0">
+          <button id="lostBtn">Lost Bid</button>
+        </div>
+      </div>
+      <button id="wonBtn" class="success wide">🏆 WON — Choose Winner(s)</button>
+    </section>
+
+    <section id="winnerBox" class="card hidden">
+      <div class="section-head">
+        <h2>🏆 Select Winner(s)</h2>
+        <span>Pot: <strong id="winnerPot">৳0</strong></span>
+      </div>
+      <div id="winnerList"></div>
+      <div class="winner-tools">
+        <button id="selectAllWinnersBtn">Select All</button>
+        <button id="clearWinnersBtn">Clear</button>
+      </div>
+      <button id="confirmWinnerBtn" class="success">Confirm Winner(s) & Distribute Pot</button>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <h2>🤖 Bot / Bank</h2>
+        <span class="badge">20% Interest</span>
+      </div>
+      <div class="bot-balance"><span>Available Bank Balance</span><strong id="botBalance2">৳10,000</strong></div>
+      <div class="grid two">
+        <label>Select Player<select id="loanPlayer"></select></label>
+        <label>Borrow Amount<input id="loanAmount" type="number" min="1" step="1" placeholder="500"></label>
+      </div>
+      <button id="borrowBtn">💰 Borrow from Bot</button>
+      <div id="loans"></div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <h2>👤 Master Player Records</h2>
+        <div class="search-wrap"><input id="playerSearch" placeholder="Search player..."></div>
+      </div>
+      <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th>Name</th><th>Balance</th><th>Loan Due</th><th>Running</th>
+              <th>Won</th><th>Lost/Fold</th><th>Net Result</th><th>Action</th>
+            </tr>
+          </thead>
+          <tbody id="playerDetails"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <h2>📜 Transaction History</h2>
+        <button id="clearHistoryBtn" class="small-btn">Clear Display</button>
+      </div>
+      <div id="history"></div>
+    </section>
+
+    <section class="card">
+      <div class="section-head">
+        <h2>📊 Game Summary</h2>
+        <button id="exportBtn">⬇ Export JSON</button>
+      </div>
+      <div id="summary" class="summary-grid"></div>
+      <div class="import-box">
+        <label>Import Saved JSON<input id="importFile" type="file" accept=".json"></label>
+      </div>
+    </section>
+  </main>
+
+  <footer class="developer-footer">
+    <div>🎮 Money Tracker Pro</div>
+    <strong>Developer — Jawad Jahan</strong>
+    <button id="resetBtn" class="danger-outline bottom-reset">Reset Game</button>
+  </footer>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
